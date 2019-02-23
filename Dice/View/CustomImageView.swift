@@ -10,12 +10,15 @@ import UIKit
 
 class CustomImageView: UIImageView {
 
+    
     override func layoutSubviews() {
         
         setShadow()
     }
     
+    
     func shake() {
+        
         let shake           = CABasicAnimation(keyPath: "position")
         shake.duration      = 0.1
         shake.repeatCount   = 2
@@ -32,6 +35,7 @@ class CustomImageView: UIImageView {
         
         layer.add(shake, forKey: "position")
     }
+    
     
     private func setShadow() {
         

@@ -10,6 +10,7 @@ import UIKit
 
 class CustomButton: UIButton {
     
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupButton()
@@ -23,6 +24,7 @@ class CustomButton: UIButton {
     
     
     func setupButton() {
+        
         setShadow()
         setTitleColor(.white, for: .normal)
         
@@ -35,6 +37,7 @@ class CustomButton: UIButton {
     
     
     private func setShadow() {
+        
         layer.shadowColor   = UIColor.black.cgColor
         layer.shadowOffset  = CGSize(width: 0.0, height: 6.0)
         layer.shadowRadius  = 8
@@ -45,6 +48,7 @@ class CustomButton: UIButton {
     
     
     func shake() {
+        
         let shake           = CABasicAnimation(keyPath: "position")
         shake.duration      = 0.1
         shake.repeatCount   = 1

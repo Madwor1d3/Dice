@@ -82,8 +82,8 @@
 		0A6807272220916800DD7479 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				0A6807142220915200DD7479 /* AppDelegate.swift */,
 				0A6807162220915200DD7479 /* ViewController.swift */,
+				0A6807142220915200DD7479 /* AppDelegate.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
