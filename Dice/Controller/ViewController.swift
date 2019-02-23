@@ -10,67 +10,69 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var diceArray : Array = ["dice1", "dice2", "dice3", "dice4", "dice5", "dice6"]
-    var firstRandomIndex : Int = 0
-    var secondRandomIndex : Int = 0
-    let topContainer = UIView()
-    let midContainer = UIView()
-    let bottomContainer = UIView()
-    let backgroundImage = UIImageView()
-    let diceLogo = UIImageView()
-    let leftDiceImageView = UIImageView()
-    let rightDiceImageView = UIImageView()
-    let button = CustomButton()
+    
+    var diceArray : Array       = ["dice1", "dice2", "dice3", "dice4", "dice5", "dice6"]
+    var firstRandomIndex        = 0
+    var secondRandomIndex       = 0
+    let topContainer            = UIView()
+    let midContainer            = UIView()
+    let bottomContainer         = UIView()
+    let backgroundImage         = UIImageView()
+    let diceLogo                = CustomImageView()
+    let leftDiceImageView       = CustomImageView()
+    let rightDiceImageView      = CustomImageView()
+    var rollButton              = CustomButton()
+    
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        diceArray = ["dice1", "dice2", "dice3", "dice4", "dice5", "dice6"]
-        
         setBackground()
-        
         setContainers()
-        
         setDiceLogo()
-        
         setDiceViews()
-        
-        setRollButton()
-        
+        setUpButtonConstraints()
+        addActionToBottomButton()
     }
     
+    
+    
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        
         if motion == .motionShake {
             updateDiceImages()
+            shakeDice()
         }
     }
+    
     
     
     @objc func rollButtonPressed() {
         
         updateDiceImages()
+        rollButton.shake()
+        shakeDice()
     }
     
     
     
     func updateDiceImages() {
         
-        firstRandomIndex = Int(arc4random_uniform(6))
-        secondRandomIndex = Int(arc4random_uniform(6))
-        
-        leftDiceImageView.image = UIImage(named: diceArray[firstRandomIndex])
+        firstRandomIndex         = Int(arc4random_uniform(6))
+        secondRandomIndex        = Int(arc4random_uniform(6))
+
+        leftDiceImageView.image  = UIImage(named: diceArray[firstRandomIndex])
         rightDiceImageView.image = UIImage(named: diceArray[secondRandomIndex])
     }
+    
     
     
     func setBackground() {
         
         view.addSubview(backgroundImage)
-        
-        backgroundImage.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
-        
         backgroundImage.image = UIImage(named: "newbackground")
+        backgroundImage.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
     }
     
     
@@ -89,6 +91,7 @@ class ViewController: UIViewController {
     }
     
     
+    
     func  setDiceLogo() {
         
         topContainer.addSubview(diceLogo)
@@ -98,38 +101,58 @@ class ViewController: UIViewController {
     }
     
     
+    
     func setDiceViews() {
         
         [leftDiceImageView, rightDiceImageView].forEach { midContainer.addSubview($0) }
+        leftDiceImageView.image = UIImage(named: "dice1")
+        rightDiceImageView.image = UIImage(named: "dice1")
         
         leftDiceImageView.anchor(top: nil, leading: midContainer.leadingAnchor, bottom: nil, trailing: nil, size: .init(width: 100, height: 0))
         leftDiceImageView.heightAnchor.constraint(equalTo: leftDiceImageView.widthAnchor).isActive = true
         
         rightDiceImageView.anchor(top: nil, leading: nil, bottom: nil, trailing: midContainer.trailingAnchor, padding: .init(top: 0, left: 0, bottom: 0, right: 0), size: .init(width: 100, height: 0))
         rightDiceImageView.heightAnchor.constraint(equalTo: rightDiceImageView.widthAnchor).isActive = true
-        
-        leftDiceImageView.image = UIImage(named: "dice1")
-        rightDiceImageView.image = UIImage(named: "dice1")
-    }
-    
-    func setRollButton() {
-        
-        bottomContainer.addSubview(button)
-        button.anchor(top: nil, leading: nil, bottom: nil, trailing: nil, size: .init(width: 155, height: 60))
-        button.centering(button, in: bottomContainer)
-        button.setTitle("Roll", for: .normal)
-        button.addTarget(self, action: #selector(rollButtonPressed), for: .touchUpInside)
     }
     
     
+    
+    func setUpButtonConstraints() {
+        
+        view.addSubview(rollButton)
+        rollButton.setTitle("Roll", for: .normal)
+        rollButton.centering(rollButton, in: bottomContainer)
+        rollButton.anchor(top: nil, leading: nil, bottom: nil, trailing: nil, size: .init(width: 155, height: 60))
+        
+        
+    }
+    
+    
+    
+    func  shakeDice() {
+        
+        [leftDiceImageView, rightDiceImageView].forEach { $0.shake() }
+    }
+    
+    
+    
+    func addActionToBottomButton() {
+        
+        rollButton.addTarget(self, action: #selector(rollButtonPressed), for: .touchUpInside)
+    }
 }
 
+
+
 extension UIView {
+    
+    
     
     func fillSuperview() {
         
         anchor(top: superview?.topAnchor, leading: superview?.leadingAnchor, bottom: superview?.bottomAnchor, trailing: superview?.trailingAnchor)
     }
+    
     
     
     func centering(_ childView: UIView, in parentView: UIView) {
@@ -140,11 +163,13 @@ extension UIView {
     }
     
     
+    
     func anchorSize(to view: UIView) {
         
         widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
     }
+    
     
     
     func anchor(top: NSLayoutYAxisAnchor?, leading: NSLayoutXAxisAnchor?, bottom: NSLayoutYAxisAnchor?, trailing: NSLayoutXAxisAnchor?, padding: UIEdgeInsets = .zero, size: CGSize = .zero) {
